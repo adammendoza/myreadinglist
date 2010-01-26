@@ -8,10 +8,12 @@
 	"128":"icons/icon128x128.png"
   },
   "browser_action": {
-	"default_icon": "icons/icon48x48.png",
-	"default_title": "My reading list",
+	  "default_icon": "icons/icon48x48.png",
+	  "default_title": "My reading list",
 	"popup": "readinglist.html"
   },
+  "options_page": "options.html",
+  "background_page": "background.html",
   "permissions": [ "tabs", "https://readitlaterlist.com/v2/*", "http://*/" ],
   "update_url": "http://clients2.google.com/service/update2/crx",
   "version": "0.5.0"

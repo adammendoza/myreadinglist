@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" src="libs/jquery.js"></script>
+		<script type="text/javascript">
+			var apikey = "d5cARgf9df535TV12cp22b5j66T5e4c1";
+			$(function() {
+				if (localStorage['username'])
+					$("input#username").val(localStorage['username']);
+				if (localStorage['password'])
+					$("input#password").val(localStorage['password']);
+				$('.error').hide();
+				$('#processing').hide();
+				$(".button").click(function() {  
+					// validate and process form here  
+					$('.error').hide();  
+					var username = $("input#username").val();  
+					if (username == "") {  
+						$("label#username_error").show();  
+						$("input#username").focus();  
+						return false;  
+					}
+					var password = $("input#password").val();  
+					if (password == "") {  
+						$("label#password_error").show();  
+						$("input#password").focus();  
+						return false;  
+					}
+					$('#processing').show();
+					$('#status_image').hide();
+					$('#notification').hide();
+					//username=name&password=123&apikey=yourapikey
+					var params = 'username='+ username + '&password=' + password + '&apikey=' + localStorage['apikey'];
+					$.ajax({
+						type: "GET",
+						url: "https://readitlaterlist.com/v2/auth",
+						data: params,
+						success: function(data, status, XMLHttpRequest) {
+							localStorage['username'] = username;
+							localStorage['password'] = password;
+							localStorage['authDone'] = true;
+							$('#processing').hide();
+							$('#notification').html("<h3>Login Successful!</h3>")
+							.append("<p>You can now use your reading list.</p>")
+							.hide()
+							.fadeIn(500, function() {
+								$('#status_image').show();
+								$('#status_image').html("<img id='icon' src='icons/checkIcon48x48.png' />");
+							});
+						},
+						error: function(xhr, errorStatus, errorThrown) {
+							localStorage['username'] = "";
+							localStorage['password'] = "";
+							localStorage['authDone'] = false;
+							$('#processing').hide();
+							if (xhr.status == "401") {
+								$('#notification').html("<h3>Username and/or password incorrect!</h3>")
+								.append("<p>If you are a new user, please register first.</p>")
+								.hide()
+								.fadeIn(500, function() {
+									$('#status_image').show();
+									$('#status_image').html("<img id='icon' src='icons/errorIcon48x48.png' />");
+								});
+							}
+						}
+					});
+					return false;
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Reading List - Options</h1>
+			<div id="login_form">
+			  <form name="login" action="">
+				<fieldset>
+				  <label for="username" id="username_label">Username: </label>
+				  <input type="text" name="username" id="username" size="30" value="" class="text-input" />
+				  <label class="error" for="username" id="username_error">This field is required.</label>
+				  <br/>
+				  <label for="password" id="password_label">Password: </label>
+				  <input type="password" name="password" id="password" size="30" value="" class="text-input" />
+				  <label class="error" for="password" id="password_error">This field is required.</label>
+				  <br />
+				  <input type="submit" name="submit" class="button" id="save_btn" value="Save" />
+				  <input type="submit" name="register" class="button" id="register_btn" value="Register" />
+				</fieldset>
+			  </form>
+			</div>
+			<table>
+				<tbody>
+					<tr><td><img id='processing' src='icons/processing.gif'/></td></tr>
+					<tr>
+						<td width="20%">
+							<div id="status_image">
+							</div>
+						</td>
+						<td width="80%">
+							<div id="notification">
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+	  </body>
+</html>
