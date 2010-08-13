@@ -2,13 +2,32 @@
 var since = null;
 
 $(document).ready( function() {
+
+	if (localStorage['username'] == "") {
+		showLoginPage();
+		return;
+	}
 	$("#processing16").hide();
+	$("#refreshing").hide();
 	$("#addButton").click(addToList);
+	$("#iframelist").load( function() {
+		$("#addButton").show();
+		$("#processing16").hide();
+		$("#iframecontainer").show();
+		$("#refreshing").hide();
+	});
 });
+
+function showLoginPage() {
+	
+}
 
 function addToList() {
 	$("#addButton").hide();
+	$("#iframecontainer").hide();
 	$("#processing16").show();
+	$("#refreshing").show();
+	
 	chrome.tabs.getSelected(null, addPage)
 }
 
@@ -21,13 +40,10 @@ function addPage(tab) {
 		success: function(data, status, XMLHttpRequest) {
 			var f = document.getElementById('iframelist');
 			f.src = f.src;
-			$("#addButton").show();
-			$("#processing16").hide();
+
 		},
 		error: function(xhr, errorStatus, errorThrown) {
 			alert('Failed to add page');
-			$("#addButton").show();
-			$("#processing16").hide();
 		}
 	});
 
