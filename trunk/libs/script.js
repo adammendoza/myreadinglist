@@ -32,6 +32,12 @@ function addToList() {
 }
 
 function addPage(tab) {
+	if (localStorage['username'] === undefined || localStorage['password'] === undefined) {
+		chrome.tabs.create({
+        	url: chrome.extension.getURL("options.html")
+		});
+	}
+	
 	var params = 'username='+localStorage['username']+'&password='+localStorage['password']+'&apikey='+localStorage['apikey']+'&url='+tab.url+'&title='+tab.title;
 	$.ajax({
 		type: "GET",

@@ -1,5 +1,12 @@
 var apikey = "d5cARgf9df535TV12cp22b5j66T5e4c1";
 
+if (localStorage['username'] !== undefined) {
+	$("input#username").val(localStorage['username']);
+}
+
+if (localStorage['password'] !== undefined) {
+	$("input#oassword").val(localStorage['password']);
+}
 
 function onRegister() {
 	// validate and process form here  
